@@ -352,16 +352,19 @@ class CGI(WFIRSTInstrument):
     """
 
     camera_list = ['IMAGER', 'IFS']
-    filter_list = ['F660', 'F721', 'F770', 'F890']
+    filter_list = ['F660', 'F661', 'F721', 'F770', 'F883', 'F890']
     apodizer_list = ['CHARSPC', 'DISKSPC']
-    fpm_list = ['CHARSPC_F660_BOWTIE', 'CHARSPC_F770_BOWTIE', 'CHARSPC_F890_BOWTIE', 'DISKSPC_F721_ANNULUS']
+    fpm_list = ['CHARSPC_F660_BOWTIE', 'CHARSPC_F770_BOWTIE', 'CHARSPC_F890_BOWTIE',
+				'DISKSPC_F661_ANNULUS', 'DISKSPC_F721_ANNULUS', 'DISKSPC_F883_ANNULUS']
     lyotstop_list = ['LS30D88']
 
     _mode_table = { # MODE             CAMERA    FILTER  APODIZER   FPM             LYOT STOP
                       'CHARSPC_F660': ('IFS',    'F660', 'CHARSPC', 'CHARSPC_F660_BOWTIE', 'LS30D88'),
                       'CHARSPC_F770': ('IFS',    'F770', 'CHARSPC', 'CHARSPC_F770_BOWTIE', 'LS30D88'),
                       'CHARSPC_F890': ('IFS',    'F890', 'CHARSPC', 'CHARSPC_F890_BOWTIE', 'LS30D88'),
-                      'DISKSPC_F721': ('IMAGER', 'F721', 'DISKSPC', 'DISKSPC_F721_ANNULUS', 'LS30D88') }
+                      'DISKSPC_F661': ('IMAGER', 'F661', 'DISKSPC', 'DISKSPC_F661_ANNULUS', 'LS30D88'),
+                      'DISKSPC_F721': ('IMAGER', 'F721', 'DISKSPC', 'DISKSPC_F721_ANNULUS', 'LS30D88'),
+                      'DISKSPC_F883': ('IMAGER', 'F883', 'DISKSPC', 'DISKSPC_F883_ANNULUS', 'LS30D88') }
 
     def __init__(self, mode=None, pixelscale=None, fov_arcsec=None, apply_static_opd=False):
         super(CGI, self).__init__("CGI", pixelscale=pixelscale)
