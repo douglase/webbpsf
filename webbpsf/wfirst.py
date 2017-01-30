@@ -396,7 +396,8 @@ class CGI(WFIRSTInstrument):
            self.mode = 'CHARSPC_F660'
         else:
            self.mode = mode
-            
+           
+        self.cgi_family=None
     @property
     def camera(self):
         """Currently selected camera name"""
@@ -584,3 +585,45 @@ class CGI(WFIRSTInstrument):
                              comment='Lyot stop pixel scale in m/pixel')
         result[0].header.set('PUPLDIAM', lyotstop_hdr['PUPLDIAM'],
                              comment='Lyot stop array size, incl padding.')
+
+    def autoselect_mode(self,wavelength):
+            """
+            Changes coronagraph mode to match the wavelength.
+            When two bands overlap, the overlap is split evenly between the two filters. 
+
+
+            Parameters
+            ----------
+            wavelength : float
+            units of meters
+
+            """
+
+            _log.info("Attempting to resolve best coronagraph mode in family.")
+            if self.cgi_family == None:
+                _log.warn("No coronagraph family selected, no change to mode will be made.")
+
+
+            #right now these are hand coded from the bands, better to automatically get the bounds,
+            #but opening the FITS file would be slow, maybe there is a filter class?
+            if self.cgi_family == "CHARSPC":
+                if (wavelength < 710e-9) and (wavelength > 600e-9):
+                    self.mode = 'CHARSPC_F660'
+                elif (wavelength > 710e-9) and (wavelength < 825e-9):
+                    self.mode = 'CHARSPC_F770'
+                elif (wavelength >825e-9):
+                    self.mode = 'CHARSPC_F890'
+                else:
+                    _log.warn("No coronagraph mode change-wavelength %.5g out of range."%(wavelength))
+            elif self.cgi_family == "DISKSPC":
+                if (wavelength <710e-9) and (wavelength > 600e-9):
+                    self.mode = 'DISKSPC_F661'
+                elif (wavelength >710e-9) and (wavelength <825e-9):
+                    self.mode = 'DISKSPC_F721'
+                elif (wavelength >825e-9):
+                    self.mode = 'DISKSPC_F883'
+                else:
+                    _log.warn("No coronagraph mode change-wavelength %.5g out of range."%(wavelength))
+            else:
+                    _log.warn("No coronagraph mode change, unknown CGI family: "+str(self.cgi_family))
+
