@@ -811,7 +811,7 @@ class CGI(WFIRSTInstrument):
     def _get_aberrations(self):
         """Get the OpticalElement that applies the field-dependent
         optical aberrations. (Called in _get_optical_system.)"""
-        return None
+        return self.aberration_optic
 
     def _get_fits_header(self, result, options):
         """Populate FITS Header keywords"""
